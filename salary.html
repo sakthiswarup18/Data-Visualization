@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salary Comparison Charts</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .chart-container { display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .chart { width: 48%; margin: 10px; padding: 10px; border: 1px solid #ccc; }
+        svg { width: 100%; height: 500px; }
+        .bar rect {
+            fill: #800080; /* Change bar fill color to purple */
+            transition: fill 0.3s ease-in-out;
+        }
+        .bar rect:hover {
+            fill: #36a2eb; /* Change hover color to blue */
+        }
+        h1 { text-align: center; } /* Center the h1 heading */
+        .axis-title { font-weight: bold; } /* Make axis titles bold */
+    </style>
+</head>
+<body>
+    <h1>Salary Comparison Charts</h1>
+    <div class="chart-container">
+        <div class="chart" id="company_size_chart">
+            <h2>Salary vs Company Size</h2>
+            <p>This bar chart illustrates average salaries across three categories of company sizes. The tallest bar indicates the highest average salary, typically associated with larger companies, decreasing progressively with medium and smaller-sized companies. This visual comparison succinctly demonstrates the trend that larger companies tend to offer higher average salaries.</p>
+            <svg id="company_size_svg"></svg>
+        </div>
+        <div class="chart" id="work_setting_chart">
+            <h2>Salary vs Work Setting</h2>
+            <p>The bar chart titled "Salary vs Work Setting," comparing average salaries in different work environments. Three bars represent different work settings: 'Hybrid', 'In-person', and 'Remote'. The x-axis labels each work setting, and the y-axis indicates the salary range from $0 to $140,000. The 'Remote' setting shows the highest average salary, followed by 'In-person', and 'Hybrid' has the lowest among the three.</p>
+            <svg id="work_setting_svg"></svg>
+        </div>
+        <div class="chart" id="experience_level_chart">
+            <h2>Salary vs Experience Level</h2>
+            <p>The "Salary vs Experience Level" chart displays a straightforward trend: as professional experience increases from entry-level to executive positions, so does the average salary. Executives earn the most, followed by seniors, then mid-level employees, with entry-level workers earning the least. This visualizes the common career progression where higher experience often correlates with higher pay.</p>
+            <svg id="experience_level_svg"></svg>
+        </div>
+    </div>
+    <script>
+        function createBarChart(csvFile, svgId) {
+    d3.csv(csvFile, function(d) {
+        d.average_salary = +d.average_salary; // Convert average_salary to a number
+        return d;
+    }).then(function(data) {
+        const svg = d3.select(svgId),
+              margin = {top: 40, right: 20, bottom: 100, left: 60},  // Adjusted bottom margin for labels
+              width = +svg.style("width").replace("px", "") - margin.left - margin.right,
+              height = +svg.style("height").replace("px", "") - margin.top - margin.bottom;
+
+        const x = d3.scaleBand().range([0, width]).padding(0.1),
+              y = d3.scaleLinear().range([height, 0]);
+
+        const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+        x.domain(data.map(d => d.label));
+        y.domain([0, d3.max(data, d => d.average_salary)]);
+
+        // Create the x-axis with a smoother transition
+        g.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x))
+            .selectAll("text")
+                .attr("transform", "rotate(-45)")
+                .style("text-anchor", "end");
+
+        // Create the y-axis with formatted ticks and label
+        const yAxis = g.append("g")
+            .call(d3.axisLeft(y).ticks(10).tickFormat(d => `$${d3.format(",")(d)}`));
+
+        // Append a text element to the yAxis group for the axis title
+        yAxis.append("text")
+            .attr("class", "axis-title")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -40) // Adjust position based on your preference
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end")
+            .attr("fill", "#000")
+            .style("font-weight", "bold"); // Make axis title bold
+           
+
+        // Create bars with gradient fill and transition
+        g.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", d => x(d.label))
+            .attr("width", x.bandwidth())
+            .attr("y", d => height)
+            .attr("height", 0) // Start transition from 0 height
+            .attr("fill", "#800080") // Changed to purple color
+            .on("mouseover", function() {
+                d3.select(this).attr("fill", "#36a2eb"); // Changed hover color to blue
+            })
+            .on("mouseout", function() {
+                d3.select(this).attr("fill", "#800080"); // Revert back to purple color on mouseout
+            })
+            .transition().duration(750)
+            .attr("y", d => y(d.average_salary))
+            .attr("height", d => height - y(d.average_salary));
+
+    }).catch(function(error) {
+        console.error('Error loading the CSV data:', error);
+    });
+}
+
+        // Specify the files and target SVG elements
+        createBarChart('sal_company_size_data.csv', '#company_size_svg');
+        createBarChart('sal_work_setting_data.csv', '#work_setting_svg');
+        createBarChart('sal_experience_level_data.csv', '#experience_level_svg');
+
+    </script>
+</body>
+</html>

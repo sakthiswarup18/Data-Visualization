@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Buttons</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      background-image: url('ds.jpg');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 100%; /* Adjust this value to zoom out the image */
+      background-attachment: fixed; /* Keeps the background image fixed during scrolling */
+      user-select: none; /* Prevents text selection */
+      -webkit-user-drag: none; /* Prevents dragging in WebKit browsers */
+      -webkit-touch-callout: none; /* Prevents the long tap context menu on mobile */
+      overflow: hidden; /* Prevents scrolling */
+      margin: 0; /* Reset default body margin */
+      padding: 0; /* Reset default body padding */
+    }
+
+    .content {
+      position: relative;
+      text-align: center; /* Centers the content */
+      height: calc(100vh - 50px); /* Full viewport height minus 50px */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: -12px; /* Move content 50px above */
+    }
+
+    h1 {
+      color: white;
+      font-weight: bold;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: white; /* Change button fill to white */
+      color: black; /* Change button text to black */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #ddd; /* Add hover background color */
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>Choose an Option:</h1>
+    <div id="buttonContainer"></div>
+  </div>
+
+  <script>
+    const options = ["Salary", "Experience Level", "Job Category", "Job Tittle"];
+
+    const container = d3.select("#buttonContainer");
+
+    options.forEach(option => {
+      const button = container.append("button")
+        .text(option)
+        .attr("class", "button")
+        .on("click", function() {
+          let link;
+          switch (option) {
+            case "Salary":
+              link = "salary.html";
+              break;
+            case "Experience Level":
+              link = 'mixed.html';
+              break;
+            case "Job Category":
+              link = "job category.html";
+              break;
+            case "Job Tittle":
+              link = "job tittle.html";
+              break;
+            default:
+              console.log(`${option} button clicked`);
+              return;
+          }
+          window.location.href = link;
+        });
+
+      button.append("a")
+        .attr("href", "javascript:void(0);") // Set href to javascript:void(0); for accessibility
+        .style("text-decoration", "none")
+        .style("color", "inherit")
+        .style("display", "block")
+        .html("&nbsp;");
+    });
+  </script>
+</body>
+</html>

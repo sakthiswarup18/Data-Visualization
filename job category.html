@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Experience Level vs Job Category</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        /* Center the entire page content */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-top: -100px; /* Adjusted for reduced SVG height */
+        }
+
+        #container {
+            width: 720px; /* Reduced width of the container */
+            margin-top: 50px; /* Adjusted margin */
+        }
+
+        svg {
+            font: 10px sans-serif;
+        }
+        .line {
+            fill: none;
+            stroke-width: 2px;
+        }
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+        .axis text {
+            font-size: 12px;
+        }
+        .legend {
+            font-size: 12px;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Experience Level vs Job Category</h1>
+        <p>The graph illustrates the progression of a data-related job metric across experience levels from Entry-level to Executive. It shows a general trend of increase, with some job categories, especially in higher experience levels, experiencing a sharp rise, suggesting greater growth potential or salary increases for those roles.</p>
+        <!-- Reduced SVG size -->
+        <svg width="720" height="400"></svg>
+    </div>
+    <script>
+        const svg = d3.select("svg"),
+            margin = {top: 20, right: 80, bottom: 30, left: 50},
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom,
+            g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scalePoint().range([0, width]).padding(0.5),
+              y = d3.scaleLinear().range([height, 0]);
+
+        const color = d3.scaleOrdinal(d3.schemeTableau10); // Using a visually distinct color scheme
+
+        const line = d3.line()
+            .x(d => x(d.experience_level))
+            .y(d => y(d.count));
+
+        d3.csv("experience_job_category.csv").then(function(data) {
+            const categories = Array.from(new Set(data.map(d => d.job_category))),
+                  experienceLevels = Array.from(new Set(data.map(d => d.experience_level)));
+            
+            x.domain(experienceLevels);
+            y.domain([0, d3.max(data, d => +d.count)]);
+
+            g.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x));
+
+            g.append("g")
+                .attr("class", "axis axis--y")
+                .call(d3.axisLeft(y));
+
+            const categoryLines = categories.map(function(cat, index) {
+                return {
+                    id: cat,
+                    color: color(index),
+                    values: data.filter(d => d.job_category === cat)
+                };
+            });
+
+            categoryLines.forEach(function(category) {
+                g.append("path")
+                    .datum(category.values)
+                    .attr("class", "line")
+                    .style("stroke", category.color)
+                    .attr("d", line);
+            });
+
+            // Adding legend
+             const legend = svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "end")
+      .selectAll("g")
+      .data(categoryLines.slice().reverse())
+      .enter().append("g")
+        .attr("transform", (d, i) => `translate(${width + margin.right / 2},${i * 20 + margin.top})`); // Move the legend to the right
+
+       
+    legend.append("rect")
+      .attr("x", 0)
+      .attr("width", 19)
+      .attr("height", 19)
+      .attr("fill", d => d.color);
+
+    legend.append("text")
+      .attr("x", -1) // Slightly increased the space after the colored square
+      .attr("y", 9.5)
+      .attr("dy", "0.39em")
+      .text(d => d.id);
+        });
+    </script>
+</body>
+</html>
