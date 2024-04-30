@@ -10,25 +10,25 @@
       background-image: url('ds.jpg');
       background-repeat: no-repeat;
       background-position: center center;
-      background-size: 100%; /* Adjust this value to zoom out the image */
-      background-attachment: fixed; /* Keeps the background image fixed during scrolling */
-      user-select: none; /* Prevents text selection */
-      -webkit-user-drag: none; /* Prevents dragging in WebKit browsers */
-      -webkit-touch-callout: none; /* Prevents the long tap context menu on mobile */
-      overflow: hidden; /* Prevents scrolling */
-      margin: 0; /* Reset default body margin */
-      padding: 0; /* Reset default body padding */
+      background-size: 100%;
+      background-attachment: fixed;  
+      user-select: none; 
+      -webkit-user-drag: none; 
+      -webkit-touch-callout: none; 
+      overflow: hidden; 
+      margin: 0; 
+      padding: 0; 
     }
 
     .content {
       position: relative;
-      text-align: center; /* Centers the content */
-      height: calc(100vh - 50px); /* Full viewport height minus 50px */
+      text-align: center; 
+      height: calc(100vh - 50px); 
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin-top: -12px; /* Move content 50px above */
+      margin-top: -12px; 
     }
 
     h1 {
@@ -39,8 +39,8 @@
     .button {
       display: inline-block;
       padding: 10px 20px;
-      background-color: white; /* Change button fill to white */
-      color: black; /* Change button text to black */
+      background-color: white; 
+      color: black; 
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -50,7 +50,7 @@
       transition: background-color 0.3s ease;
     }
     .button:hover {
-      background-color: #ddd; /* Add hover background color */
+      background-color: #ddd; 
     }
   </style>
 </head>
@@ -92,7 +92,7 @@
         });
 
       button.append("a")
-        .attr("href", "javascript:void(0);") // Set href to javascript:void(0); for accessibility
+        .attr("href", "javascript:void(0);") 
         .style("text-decoration", "none")
         .style("color", "inherit")
         .style("display", "block")
