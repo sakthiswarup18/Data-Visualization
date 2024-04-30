@@ -70,7 +70,7 @@
         <p>The chart titled "Company Size vs Salary vs Experience Level" offers a multi-dimensional comparison of average salaries based on company size and employee experience level. It uses grouped bar columns to represent salary ranges for small (S), medium (M), and large (L) companies at four levels of experience: Mid-level, Senior, Executive, and Entry-level. Notably, salaries increase with experience across all company sizes, with executive roles commanding the highest pay. Large companies generally offer higher salaries than their smaller counterparts at each experience level, and entry-level positions show the lowest salaries, emphasizing the growth potential in both position and company size.</p>
     </div>
     <script>
-        // Load data from CSV file
+        
         d3.csv("jobs_in_data.csv").then(function(data) {
 
             const svg = d3.select("#chart").append("svg")
