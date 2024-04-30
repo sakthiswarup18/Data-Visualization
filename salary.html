@@ -10,14 +10,14 @@
         .chart { width: 48%; margin: 10px; padding: 10px; border: 1px solid #ccc; }
         svg { width: 100%; height: 500px; }
         .bar rect {
-            fill: #800080; /* Change bar fill color to purple */
+            fill: #800080; 
             transition: fill 0.3s ease-in-out;
         }
         .bar rect:hover {
-            fill: #36a2eb; /* Change hover color to blue */
+            fill: #36a2eb; 
         }
-        h1 { text-align: center; } /* Center the h1 heading */
-        .axis-title { font-weight: bold; } /* Make axis titles bold */
+        h1 { text-align: center; } 
+        .axis-title { font-weight: bold; } 
     </style>
 </head>
 <body>
@@ -42,11 +42,11 @@
     <script>
         function createBarChart(csvFile, svgId) {
     d3.csv(csvFile, function(d) {
-        d.average_salary = +d.average_salary; // Convert average_salary to a number
+        d.average_salary = +d.average_salary; 
         return d;
     }).then(function(data) {
         const svg = d3.select(svgId),
-              margin = {top: 40, right: 20, bottom: 100, left: 60},  // Adjusted bottom margin for labels
+              margin = {top: 40, right: 20, bottom: 100, left: 60},  
               width = +svg.style("width").replace("px", "") - margin.left - margin.right,
               height = +svg.style("height").replace("px", "") - margin.top - margin.bottom;
 
@@ -58,7 +58,6 @@
         x.domain(data.map(d => d.label));
         y.domain([0, d3.max(data, d => d.average_salary)]);
 
-        // Create the x-axis with a smoother transition
         g.append("g")
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(x))
@@ -66,22 +65,17 @@
                 .attr("transform", "rotate(-45)")
                 .style("text-anchor", "end");
 
-        // Create the y-axis with formatted ticks and label
         const yAxis = g.append("g")
             .call(d3.axisLeft(y).ticks(10).tickFormat(d => `$${d3.format(",")(d)}`));
-
-        // Append a text element to the yAxis group for the axis title
         yAxis.append("text")
             .attr("class", "axis-title")
             .attr("transform", "rotate(-90)")
-            .attr("y", -40) // Adjust position based on your preference
+            .attr("y", -40) 
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
             .attr("fill", "#000")
-            .style("font-weight", "bold"); // Make axis title bold
+            .style("font-weight", "bold"); 
            
-
-        // Create bars with gradient fill and transition
         g.selectAll(".bar")
             .data(data)
             .enter().append("rect")
@@ -89,13 +83,13 @@
             .attr("x", d => x(d.label))
             .attr("width", x.bandwidth())
             .attr("y", d => height)
-            .attr("height", 0) // Start transition from 0 height
-            .attr("fill", "#800080") // Changed to purple color
+            .attr("height", 0) 
+            .attr("fill", "#800080")
             .on("mouseover", function() {
-                d3.select(this).attr("fill", "#36a2eb"); // Changed hover color to blue
+                d3.select(this).attr("fill", "#36a2eb"); 
             })
             .on("mouseout", function() {
-                d3.select(this).attr("fill", "#800080"); // Revert back to purple color on mouseout
+                d3.select(this).attr("fill", "#800080"); 
             })
             .transition().duration(750)
             .attr("y", d => y(d.average_salary))
@@ -105,8 +99,6 @@
         console.error('Error loading the CSV data:', error);
     });
 }
-
-        // Specify the files and target SVG elements
         createBarChart('sal_company_size_data.csv', '#company_size_svg');
         createBarChart('sal_work_setting_data.csv', '#work_setting_svg');
         createBarChart('sal_experience_level_data.csv', '#experience_level_svg');
