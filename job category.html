@@ -5,7 +5,7 @@
     <title>Experience Level vs Job Category</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        /* Center the entire page content */
+        
         body {
             display: flex;
             justify-content: center;
@@ -16,12 +16,12 @@
         }
         h1 {
             text-align: center;
-            margin-top: -100px; /* Adjusted for reduced SVG height */
+            margin-top: -100px; 
         }
 
         #container {
-            width: 720px; /* Reduced width of the container */
-            margin-top: 50px; /* Adjusted margin */
+            width: 720px; 
+            margin-top: 50px; 
         }
 
         svg {
@@ -50,7 +50,7 @@
     <div id="container">
         <h1>Experience Level vs Job Category</h1>
         <p>The graph illustrates the progression of a data-related job metric across experience levels from Entry-level to Executive. It shows a general trend of increase, with some job categories, especially in higher experience levels, experiencing a sharp rise, suggesting greater growth potential or salary increases for those roles.</p>
-        <!-- Reduced SVG size -->
+    
         <svg width="720" height="400"></svg>
     </div>
     <script>
@@ -63,7 +63,7 @@
         const x = d3.scalePoint().range([0, width]).padding(0.5),
               y = d3.scaleLinear().range([height, 0]);
 
-        const color = d3.scaleOrdinal(d3.schemeTableau10); // Using a visually distinct color scheme
+        const color = d3.scaleOrdinal(d3.schemeTableau10); 
 
         const line = d3.line()
             .x(d => x(d.experience_level))
@@ -101,7 +101,7 @@
                     .attr("d", line);
             });
 
-            // Adding legend
+
              const legend = svg.append("g")
       .attr("font-family", "sans-serif")
       .attr("font-size", 10)
@@ -109,7 +109,7 @@
       .selectAll("g")
       .data(categoryLines.slice().reverse())
       .enter().append("g")
-        .attr("transform", (d, i) => `translate(${width + margin.right / 2},${i * 20 + margin.top})`); // Move the legend to the right
+        .attr("transform", (d, i) => `translate(${width + margin.right / 2},${i * 20 + margin.top})`); 
 
        
     legend.append("rect")
@@ -119,7 +119,7 @@
       .attr("fill", d => d.color);
 
     legend.append("text")
-      .attr("x", -1) // Slightly increased the space after the colored square
+      .attr("x", -1) 
       .attr("y", 9.5)
       .attr("dy", "0.39em")
       .text(d => d.id);
