@@ -20,19 +20,19 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            width: 90%; /* Adjust the width as needed */
-            max-width: 1200px; /* Adjust the max width as needed */
+            width: 90%; 
+            max-width: 1200px;
             margin-top: 50px;
             margin-bottom: 20px;
         }
         #chart {
-            flex-basis: 60%; /* Adjust width as needed, keeping the chart to the left */
-            height: auto; /* Adjust height as needed */
+            flex-basis: 60%; 
+            height: auto; 
         }
         p {
-            margin-bottom: 250px; /* Position the description lower */
-            width: 600px; /* Increased width of the description */
-            margin-left: -250px; /* Adjust horizontal position */
+            margin-bottom: 250px; 
+            width: 600px; 
+            margin-left: -250px; 
             align-content: normal;
             text-align: justify;
         }
@@ -65,16 +65,16 @@
     <h1>Company Size vs Salary vs Experience Level</h1>
     <div id="chart-container">
         <div id="chart" class="chart">
-            <!-- Chart will be inserted here by D3.js -->
+
         </div>
         <p>The chart titled "Company Size vs Salary vs Experience Level" offers a multi-dimensional comparison of average salaries based on company size and employee experience level. It uses grouped bar columns to represent salary ranges for small (S), medium (M), and large (L) companies at four levels of experience: Mid-level, Senior, Executive, and Entry-level. Notably, salaries increase with experience across all company sizes, with executive roles commanding the highest pay. Large companies generally offer higher salaries than their smaller counterparts at each experience level, and entry-level positions show the lowest salaries, emphasizing the growth potential in both position and company size.</p>
     </div>
     <script>
         // Load data from CSV file
         d3.csv("jobs_in_data.csv").then(function(data) {
-            // Setup SVG
+
             const svg = d3.select("#chart").append("svg")
-                .attr("width", 600) // Adjusted for the new layout
+                .attr("width", 600) 
                 .attr("height", 400);
 
             const margin = {top: 20, right: 20, bottom: 70, left: 60},
@@ -82,7 +82,7 @@
                   height = +svg.attr("height") - margin.top - margin.bottom,
                   g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            // Scales and axes
+
             const x0 = d3.scaleBand()
                 .rangeRound([0, width])
                 .paddingInner(0.1);
@@ -93,15 +93,13 @@
             const color = d3.scaleOrdinal()
                 .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"]);
 
-            // Domain settings
+
             const experienceLevels = Array.from(new Set(data.map(d => d.experience_level)));
             const companySizes = Array.from(new Set(data.map(d => d.company_size)));
             x0.domain(experienceLevels);
             x1.domain(companySizes).rangeRound([0, x0.bandwidth()]);
             y.domain([0, d3.max(data, d => +d.salary_in_usd)]).nice();
             color.domain(companySizes);
-
-            // Axes
             g.append("g")
                 .attr("class", "axis")
                 .attr("transform", "translate(0," + height + ")")
@@ -124,8 +122,6 @@
                 .attr("font-weight", "bold")
                 .attr("text-anchor", "start")
                 .text("Salary (USD)");
-
-            // Bars
             g.append("g")
                 .selectAll("g")
                 .data(data)
@@ -140,7 +136,6 @@
                 .attr("height", d => height - y(+d.salary_in_usd))
                 .attr("fill", d => color(d.company_size));
 
-            // Legend
             const legend = g.append("g")
                 .attr("transform", "translate(" + (width - 100) + ",0)")
                 .attr("text-anchor", "start")
@@ -161,7 +156,6 @@
                 .attr("dy", "0.32em")
                 .text(d => d);
 
-            // Adding legend title
             svg.append("text")
                 .attr("x", width - 90)
                 .attr("y", 10)
